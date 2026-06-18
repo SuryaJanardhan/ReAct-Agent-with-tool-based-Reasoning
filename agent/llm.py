@@ -80,14 +80,18 @@ class LLMClient:
                     }
                 })
 
+            # Build API call parameters dynamically
+            api_params = {
+                "model": self.model,
+                "messages": messages,
+                "temperature": 0.2
+            }
+            if formatted_tools:
+                api_params["tools"] = formatted_tools
+                api_params["tool_choice"] = "auto"
+
             # Call the completion API
-            response = self.client.chat.completions.create(
-                model=self.model,
-                messages=messages,
-                tools=formatted_tools if formatted_tools else None,
-                tool_choice="auto" if formatted_tools else None,
-                temperature=0.2  # Lower temperature for more deterministic tool usage
-            )
+            response = self.client.chat.completions.create(**api_params)
 
             message = response.choices[0].message
             content = message.content or ""
