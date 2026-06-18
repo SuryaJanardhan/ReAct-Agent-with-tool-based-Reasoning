@@ -9,6 +9,8 @@ __pycache__/
 .env
 .env*.local
 
+task-req.txt 
+reference.png
 # IDE configurations
 .vscode/
 .idea/
