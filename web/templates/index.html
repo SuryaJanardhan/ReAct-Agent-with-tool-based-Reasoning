@@ -730,6 +730,10 @@
                 <i class="fa-solid {% if has_openai %}fa-circle-check{% else %}fa-circle-xmark{% endif %}"></i>
                 OpenAI API
             </div>
+            <div class="badge {% if has_groq %}configured{% endif %}">
+                <i class="fa-solid {% if has_groq %}fa-circle-check{% else %}fa-circle-xmark{% endif %}"></i>
+                Groq API
+            </div>
         </div>
     </header>
 
@@ -752,6 +756,7 @@
                 <select id="providerSelect">
                     <option value="gemini" {% if default_provider == 'gemini' %}selected{% endif %}>Google Gemini</option>
                     <option value="openai" {% if default_provider == 'openai' %}selected{% endif %}>OpenAI</option>
+                    <option value="groq" {% if default_provider == 'groq' %}selected{% endif %}>Groq (Llama 3.3)</option>
                 </select>
             </div>
 

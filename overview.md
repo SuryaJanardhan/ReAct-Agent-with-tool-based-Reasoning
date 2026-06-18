@@ -16,7 +16,7 @@ This document provides a detailed, comprehensive breakdown of the ReAct AI Agent
 ## 🏗️ System Architecture
 
 The project consists of three main parts:
-- **Core Engine & Tools**: The ReAct execution loop, unified API clients (Gemini and OpenAI), and sandboxed execution tools.
+- **Core Engine & Tools**: The ReAct execution loop, unified API clients (Gemini, OpenAI, and Groq), and sandboxed execution tools.
 - **Console Interface (CLI)**: A command-line program with styled logs for local executions.
 - **Web Dashboard Studio**: A light-mode biscuit and chocolate-brown glassmorphic FastAPI interface featuring Server-Sent Events (SSE) for real-time trace streaming and Human-in-the-Loop (HITL) approval popups.
 
@@ -55,14 +55,14 @@ graph TD
 
 ### 1. Workspace Root Configurations
 - **[.gitignore](file:///media/surya/windows/Users/chint/Desktop/GPP/React-Ai-agent/.gitignore)**: Prevents check-in of temporary virtual environments (`.venv`), env secrets (`.env`), cached caches (`__pycache__`), and local reports.
-- **[requirements.txt](file:///media/surya/windows/Users/chint/Desktop/GPP/React-Ai-agent/requirements.txt)**: Specifies package dependencies (`openai`, `fastapi`, `uvicorn`, `duckduckgo_search`, `rich`, `jinja2`).
+- **[requirements.txt](file:///media/surya/windows/Users/chint/Desktop/GPP/React-Ai-agent/requirements.txt)**: Specifies package dependencies (`openai`, `groq`, `fastapi`, `uvicorn`, `duckduckgo_search`, `rich`, `jinja2`).
 - **[.env.example](file:///media/surya/windows/Users/chint/Desktop/GPP/React-Ai-agent/.env.example)**: Explains the environment settings for selecting providers and adding API keys.
 - **[Dockerfile](file:///media/surya/windows/Users/chint/Desktop/GPP/React-Ai-agent/Dockerfile)** & **[docker-compose.yml](file:///media/surya/windows/Users/chint/Desktop/GPP/React-Ai-agent/docker-compose.yml)**: Containers configurations to run the FastAPI app in any environment.
 - **[main.py](file:///media/surya/windows/Users/chint/Desktop/GPP/React-Ai-agent/main.py)**: CLI entrypoint. Takes user console commands and logs colored step traces using `rich`.
 
 ### 2. Core Agent Module (`agent/`)
 - **[agent/tools.py](file:///media/surya/windows/Users/chint/Desktop/GPP/React-Ai-agent/agent/tools.py)**: Contains the python methods matching each tool and definitions of their JSON parameters.
-- **[agent/llm.py](file:///media/surya/windows/Users/chint/Desktop/GPP/React-Ai-agent/agent/llm.py)**: Adapts requests/responses into standard structures. Can connect to Google Gemini (via standard or OpenAI interface) and OpenAI.
+- **[agent/llm.py](file:///media/surya/windows/Users/chint/Desktop/GPP/React-Ai-agent/agent/llm.py)**: Adapts requests/responses into standard structures. Can connect to Google Gemini, OpenAI, or Groq.
 - **[agent/core.py](file:///media/surya/windows/Users/chint/Desktop/GPP/React-Ai-agent/agent/core.py)**: The main runner containing the ReAct loop algorithm, pre-planning, system prompt configurations, and exception recovery.
 
 ### 3. Web Dashboard Module (`web/`)
@@ -70,7 +70,7 @@ graph TD
 - **[web/templates/index.html](file:///media/surya/windows/Users/chint/Desktop/GPP/React-Ai-agent/web/templates/index.html)**: Front-end dashboard styled in cozy biscuit-light and chocolate-brown.
 
 ### 4. Tests Module (`tests/`)
-- **[tests/test_agent.py](file:///media/surya/windows/Users/chint/Desktop/GPP/React-Ai-agent/tests/test_agent.py)**: Unit tests verifying AST math expression safety and sandbox directory guards.
+- **[tests/test_agent.py](file:///media/surya/windows/Users/chint/Desktop/GPP/React-Ai-agent/tests/test_agent.py)**: Unit tests verifying AST math expression safety, sandbox directory guards, and LLMClient providers initialization.
 - **[tests/test_react_loop.py](file:///media/surya/windows/Users/chint/Desktop/GPP/React-Ai-agent/tests/test_react_loop.py)**: Integration tests simulating planning and step sequences using mock LLM responses.
 
 ---
@@ -105,10 +105,8 @@ Standardized response format returned from the LLM model to the core loop.
 
 #### `LLMClient` (Class)
 Adapts and channels queries to different model API backends.
-*   **`__init__(provider: str)`**: Initializes the connection client wrapper. Validates key setups and configurations.
-*   **`_call_gemini(messages)`**: Configures options and calls the Google Gemini API.
-*   **`_call_openai(messages)`**: Configures options and calls the OpenAI API.
-*   **`call(messages) -> LLMResponse`**: Standard API entry point. Converts message histories, runs the target provider call, parses the output, and formats it as an `LLMResponse`.
+*   **`__init__()`**: Initializes the client wrapper. Configures connections and validates key setups for the selected provider (Gemini, OpenAI, or Groq).
+*   **`call(messages, tools) -> LLMResponse`**: Standard API entry point. Converts message histories, runs the target provider completion call (utilizing either OpenAI or Groq client packages), and formats the output as an `LLMResponse`.
 
 ---
 

@@ -40,5 +40,35 @@ class TestAgentTools(unittest.TestCase):
             if os.path.exists(test_path):
                 os.remove(test_path)
 
+from unittest.mock import patch
+from agent.llm import LLMClient
+
+class TestLLMClient(unittest.TestCase):
+
+    @patch('agent.llm.OpenAI')
+    @patch('agent.llm.Groq')
+    def test_llm_client_initialization_groq(self, MockGroq, MockOpenAI):
+        with patch.dict(os.environ, {
+            "LLM_PROVIDER": "groq",
+            "GROQ_API_KEY": "test_groq_key",
+            "GROQ_MODEL": "llama-3.3-70b-versatile"
+        }):
+            client = LLMClient()
+            self.assertEqual(client.provider, "groq")
+            self.assertEqual(client.model, "llama-3.3-70b-versatile")
+            MockGroq.assert_called_once_with(api_key="test_groq_key")
+
+    @patch('agent.llm.OpenAI')
+    def test_llm_client_initialization_openai(self, MockOpenAI):
+        with patch.dict(os.environ, {
+            "LLM_PROVIDER": "openai",
+            "OPENAI_API_KEY": "test_openai_key",
+            "OPENAI_MODEL": "gpt-4o-mini"
+        }):
+            client = LLMClient()
+            self.assertEqual(client.provider, "openai")
+            self.assertEqual(client.model, "gpt-4o-mini")
+            MockOpenAI.assert_called_once_with(api_key="test_openai_key")
+
 if __name__ == "__main__":
     unittest.main()

@@ -72,8 +72,14 @@ session_lock = threading.Lock()
 def index(request: Request):
     """Serves the dashboard home page."""
     # Check what providers have keys configured to display status on the UI
-    has_gemini = bool(os.getenv("GEMINI_API_KEY"))
-    has_openai = bool(os.getenv("OPENAI_API_KEY"))
+    gemini_key = os.getenv("GEMINI_API_KEY", "")
+    openai_key = os.getenv("OPENAI_API_KEY", "")
+    groq_key = os.getenv("GROQ_API_KEY", "")
+
+    has_gemini = bool(gemini_key) and "your_gemini" not in gemini_key
+    has_openai = bool(openai_key) and "your_openai" not in openai_key
+    has_groq = bool(groq_key) and "your_groq" not in groq_key
+
     default_provider = os.getenv("LLM_PROVIDER", "gemini")
     
     return templates.TemplateResponse(
@@ -82,6 +88,7 @@ def index(request: Request):
         context={
             "has_gemini": has_gemini,
             "has_openai": has_openai,
+            "has_groq": has_groq,
             "default_provider": default_provider
         }
     )

@@ -16,6 +16,7 @@ The result of the action, called an Observation, is fed back into the agent's co
 
 ReAct Agent Loop Visualization
 The following diagram illustrates the flow of a ReAct agent handling a user request:
+diagram is at the root reference.png
 
 Expand
 Defining and Implementing Tools

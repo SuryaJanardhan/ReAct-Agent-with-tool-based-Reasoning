@@ -3,6 +3,7 @@ import json
 from typing import List, Dict, Any, Optional
 from dotenv import load_dotenv
 from openai import OpenAI
+from groq import Groq
 
 # Load environment variables
 load_dotenv()
@@ -31,7 +32,7 @@ class LLMResponse:
 
 
 class LLMClient:
-    """Unified client wrapper to support OpenAI and Google Gemini."""
+    """Unified client wrapper to support OpenAI, Google Gemini, and Groq."""
     def __init__(self):
         self.provider = os.getenv("LLM_PROVIDER", "gemini").lower()
         
@@ -52,9 +53,17 @@ class LLMClient:
                 api_key=self.api_key,
                 base_url="https://generativelanguage.googleapis.com/v1beta/openai"
             )
+            
+        elif self.provider == "groq":
+            self.api_key = os.getenv("GROQ_API_KEY")
+            self.model = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+            if not self.api_key:
+                raise ValueError("GROQ_API_KEY environment variable is missing.")
+            self.client = Groq(api_key=self.api_key)
+            
         else:
             # Fallback to check if we can try native Gemini or throw
-            raise ValueError(f"Unsupported LLM_PROVIDER '{self.provider}'. Must be 'gemini' or 'openai'.")
+            raise ValueError(f"Unsupported LLM_PROVIDER '{self.provider}'. Must be 'gemini', 'openai', or 'groq'.")
 
     def call(self, messages: List[Dict[str, str]], tools: List[Dict[str, Any]]) -> LLMResponse:
         """Sends chat history and tool schemas to the LLM and parses the response."""

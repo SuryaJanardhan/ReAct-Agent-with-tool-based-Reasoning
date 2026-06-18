@@ -8,3 +8,4 @@ requests>=2.30.0
 duckduckgo_search>=6.0.0
 rich>=13.0.0
 jinja2>=3.0.0
+groq>=0.4.0
