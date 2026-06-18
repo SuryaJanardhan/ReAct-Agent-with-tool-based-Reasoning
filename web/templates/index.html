@@ -7,28 +7,30 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Sacramento&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            --bg-color: #0b0f19;
-            --primary: #6366f1;
-            --primary-glow: rgba(99, 102, 241, 0.15);
-            --accent: #a855f7;
-            --accent-glow: rgba(168, 85, 247, 0.15);
-            --success: #10b981;
-            --success-glow: rgba(16, 185, 129, 0.1);
-            --warning: #f59e0b;
-            --warning-glow: rgba(245, 158, 11, 0.15);
-            --danger: #ef4444;
-            --card-bg: rgba(15, 23, 42, 0.65);
-            --border-color: rgba(255, 255, 255, 0.08);
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
+            --bg-color: #f7f3eb;
+            --primary: #6c4e31;
+            --primary-glow: rgba(108, 78, 49, 0.08);
+            --accent: #a98467;
+            --accent-glow: rgba(169, 132, 103, 0.08);
+            --success: #3a5a40;
+            --success-glow: rgba(58, 90, 64, 0.06);
+            --warning: #b07d62;
+            --warning-glow: rgba(176, 125, 98, 0.08);
+            --danger: #9a031e;
+            --card-bg: rgba(255, 255, 255, 0.82);
+            --border-color: rgba(108, 78, 49, 0.12);
+            --text-main: #2b1f15;
+            --text-muted: #6b5c50;
             --font-sans: 'Plus Jakarta Sans', sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
+            --font-cursive: 'Sacramento', cursive;
+            --font-serif: 'Playfair Display', serif;
         }
 
         * {
@@ -40,8 +42,8 @@
         body {
             background-color: var(--bg-color);
             background-image: 
-                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.15) 0px, transparent 50%);
+                radial-gradient(at 0% 0%, rgba(169, 132, 103, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(108, 78, 49, 0.12) 0px, transparent 50%);
             background-attachment: fixed;
             color: var(--text-main);
             font-family: var(--font-sans);
@@ -53,7 +55,7 @@
 
         header {
             backdrop-filter: blur(12px);
-            background: rgba(15, 23, 42, 0.4);
+            background: rgba(247, 243, 235, 0.75);
             border-bottom: 1px solid var(--border-color);
             padding: 1rem 2rem;
             display: flex;
@@ -68,15 +70,12 @@
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            font-size: 1.25rem;
+            font-size: 1.35rem;
             font-weight: 700;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--primary);
         }
 
         .header-logo i {
-            -webkit-text-fill-color: initial;
             background: linear-gradient(135deg, var(--primary), var(--accent));
             padding: 8px;
             border-radius: 10px;
@@ -90,7 +89,7 @@
         }
 
         .badge {
-            background: rgba(255, 255, 255, 0.04);
+            background: rgba(108, 78, 49, 0.05);
             border: 1px solid var(--border-color);
             padding: 0.25rem 0.75rem;
             border-radius: 9999px;
@@ -99,11 +98,12 @@
             align-items: center;
             gap: 0.5rem;
             font-weight: 500;
+            color: var(--text-muted);
         }
 
         .badge.configured {
             background: var(--success-glow);
-            border-color: rgba(16, 185, 129, 0.3);
+            border-color: rgba(58, 90, 64, 0.3);
             color: var(--success);
         }
 
@@ -132,11 +132,11 @@
             flex-direction: column;
             gap: 1.5rem;
             height: fit-content;
-            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px -10px rgba(108, 78, 49, 0.12);
         }
 
         .control-title {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             font-weight: 600;
             display: flex;
             align-items: center;
@@ -157,11 +157,11 @@
         }
 
         textarea {
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.75);
             border: 1px solid var(--border-color);
             border-radius: 10px;
             padding: 0.75rem;
-            color: white;
+            color: var(--text-main);
             font-family: var(--font-sans);
             font-size: 0.9rem;
             resize: vertical;
@@ -176,11 +176,11 @@
         }
 
         select, input[type="range"] {
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.75);
             border: 1px solid var(--border-color);
             border-radius: 10px;
             padding: 0.75rem;
-            color: white;
+            color: var(--text-main);
             font-family: var(--font-sans);
             font-size: 0.9rem;
             outline: none;
@@ -191,6 +191,11 @@
             border-color: var(--primary);
         }
 
+        select option {
+            background: var(--bg-color);
+            color: var(--text-main);
+        }
+
         .range-container {
             display: flex;
             align-items: center;
@@ -199,22 +204,24 @@
 
         .range-container input {
             flex: 1;
+            accent-color: var(--primary);
         }
 
         .range-value {
             font-family: var(--font-mono);
             font-weight: 600;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(108, 78, 49, 0.08);
             padding: 0.25rem 0.5rem;
             border-radius: 5px;
             font-size: 0.85rem;
+            color: var(--primary);
         }
 
         .switch-container {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(108, 78, 49, 0.03);
             padding: 0.75rem;
             border-radius: 10px;
             border: 1px solid var(--border-color);
@@ -256,7 +263,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(255,255,255,0.1);
+            background-color: rgba(108, 78, 49, 0.15);
             transition: .3s;
             border-radius: 24px;
         }
@@ -295,16 +302,16 @@
             justify-content: center;
             align-items: center;
             gap: 0.5rem;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 4px 15px rgba(108, 78, 49, 0.2);
         }
 
         .btn-run:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+            box-shadow: 0 6px 20px rgba(108, 78, 49, 0.3);
         }
 
         .btn-run:disabled {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(108, 78, 49, 0.1);
             color: var(--text-muted);
             cursor: not-allowed;
             transform: none;
@@ -328,6 +335,7 @@
             align-items: center;
             justify-content: space-between;
             font-size: 0.85rem;
+            box-shadow: 0 4px 20px rgba(108, 78, 49, 0.04);
         }
 
         .status-indicator {
@@ -358,7 +366,7 @@
 
         .log-container {
             flex: 1;
-            background: rgba(10, 15, 30, 0.7);
+            background: rgba(255, 255, 255, 0.65);
             backdrop-filter: blur(16px);
             border: 1px solid var(--border-color);
             border-radius: 16px;
@@ -367,7 +375,7 @@
             display: flex;
             flex-direction: column;
             gap: 1.25rem;
-            box-shadow: inset 0 2px 8px rgba(0,0,0,0.8);
+            box-shadow: inset 0 2px 8px rgba(108, 78, 49, 0.05);
             scroll-behavior: smooth;
         }
 
@@ -382,7 +390,7 @@
         }
 
         .placeholder-text i {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             background: linear-gradient(135deg, var(--primary), var(--accent));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -411,11 +419,11 @@
             content: "";
             flex: 1;
             height: 1px;
-            background: rgba(245, 158, 11, 0.15);
+            background: rgba(108, 78, 49, 0.12);
         }
 
         .card-block {
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(255, 255, 255, 0.7);
             border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 1rem;
@@ -423,13 +431,16 @@
             flex-direction: column;
             gap: 0.5rem;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(108, 78, 49, 0.02);
         }
 
         .card-block-title {
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            font-size: 0.95rem;
+            font-weight: 700;
+            font-family: var(--font-serif);
+            font-style: italic;
+            text-transform: none;
+            letter-spacing: normal;
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -437,7 +448,7 @@
 
         .thought-block {
             border-left: 3px solid var(--primary);
-            background: rgba(99, 102, 241, 0.03);
+            background: rgba(108, 78, 49, 0.03);
         }
 
         .thought-block .card-block-title {
@@ -446,27 +457,28 @@
 
         .action-block {
             border-left: 3px solid var(--accent);
-            background: rgba(168, 85, 247, 0.03);
+            background: rgba(169, 132, 103, 0.03);
         }
 
         .action-block .card-block-title {
-            color: var(--accent);
+            color: var(--primary);
         }
 
         .action-detail {
             font-family: var(--font-mono);
             font-size: 0.85rem;
-            background: rgba(0, 0, 0, 0.3);
+            background: #2b1f15;
+            color: #f7f3eb;
             padding: 0.75rem;
             border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(108, 78, 49, 0.1);
             margin-top: 0.25rem;
             white-space: pre-wrap;
         }
 
         .observation-block {
             border-left: 3px solid var(--success);
-            background: rgba(16, 185, 129, 0.03);
+            background: rgba(58, 90, 64, 0.03);
         }
 
         .observation-block .card-block-title {
@@ -476,27 +488,27 @@
         .observation-content {
             font-family: var(--font-mono);
             font-size: 0.85rem;
-            background: rgba(0, 0, 0, 0.4);
+            background: #2b1f15;
+            color: #a3e635;
             padding: 0.75rem;
             border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            color: #10b981;
+            border: 1px solid rgba(108, 78, 49, 0.1);
             white-space: pre-wrap;
             max-height: 250px;
             overflow-y: auto;
         }
 
         .plan-block {
-            border: 1px solid rgba(6, 182, 212, 0.2);
-            border-left: 3px solid #06b6d4;
-            background: rgba(6, 182, 212, 0.03);
+            border: 1px solid rgba(169, 132, 103, 0.2);
+            border-left: 3px solid var(--accent);
+            background: rgba(169, 132, 103, 0.03);
             padding: 1.25rem;
             border-radius: 12px;
             animation: slideIn 0.4s ease forwards;
         }
 
         .plan-block .card-block-title {
-            color: #06b6d4;
+            color: var(--primary);
             margin-bottom: 0.5rem;
         }
 
@@ -508,25 +520,25 @@
         }
 
         .final-block {
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(58, 90, 64, 0.3);
+            background: linear-gradient(135deg, rgba(58, 90, 64, 0.08), rgba(169, 132, 103, 0.08));
             border-radius: 14px;
             padding: 1.5rem;
             margin-top: 1rem;
-            box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.2);
+            box-shadow: 0 10px 25px -5px rgba(58, 90, 64, 0.12);
             animation: bounceIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
         .final-block .card-block-title {
             color: var(--success);
-            font-size: 1rem;
+            font-size: 1.05rem;
             margin-bottom: 0.75rem;
         }
 
         .final-content {
             font-size: 1rem;
             line-height: 1.6;
-            color: #e2e8f0;
+            color: var(--text-main);
         }
 
         /* --- Human In The Loop Modal --- */
@@ -536,7 +548,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(11, 15, 25, 0.85);
+            background: rgba(43, 31, 21, 0.6);
             backdrop-filter: blur(8px);
             z-index: 1000;
             display: flex;
@@ -553,13 +565,13 @@
         }
 
         .modal-card {
-            background: #1e293b;
-            border: 1px solid rgba(239, 68, 68, 0.3);
+            background: #f7f3eb;
+            border: 1px solid rgba(154, 3, 30, 0.3);
             border-radius: 16px;
             width: 90%;
             max-width: 550px;
             padding: 1.75rem;
-            box-shadow: 0 25px 50px -12px rgba(239, 68, 68, 0.25);
+            box-shadow: 0 25px 50px -12px rgba(154, 3, 30, 0.15);
             transform: scale(0.9);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             display: flex;
@@ -578,6 +590,8 @@
             color: var(--warning);
             font-size: 1.25rem;
             font-weight: 700;
+            font-family: var(--font-serif);
+            font-style: italic;
         }
 
         .modal-header i {
@@ -598,7 +612,8 @@
         }
 
         .modal-details {
-            background: rgba(0, 0, 0, 0.3);
+            background: #2b1f15;
+            color: #f7f3eb;
             border: 1px solid var(--border-color);
             border-radius: 10px;
             padding: 1rem;
@@ -632,8 +647,8 @@
         }
 
         .btn-approve:hover {
-            background: #059669;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            background: #2d4a35;
+            box-shadow: 0 4px 12px rgba(58, 90, 64, 0.3);
         }
 
         .btn-reject {
@@ -642,8 +657,8 @@
         }
 
         .btn-reject:hover {
-            background: #dc2626;
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+            background: #800216;
+            box-shadow: 0 4px 12px rgba(154, 3, 30, 0.3);
         }
 
         /* --- Keyframes & Animations --- */
@@ -688,14 +703,14 @@
             height: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.1);
+            background: rgba(108, 78, 49, 0.05);
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(108, 78, 49, 0.2);
             border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(108, 78, 49, 0.35);
         }
     </style>
 </head>
@@ -703,8 +718,8 @@
 
     <header>
         <div class="header-logo">
-            <i class="fa-solid fa-brain"></i>
-            <span>ReAct AI Agent Studio</span>
+            <i class="fa-solid fa-brain" style="background: linear-gradient(135deg, var(--primary), var(--accent)); padding: 8px; border-radius: 10px; color: white;"></i>
+            <span>ReAct AI <span style="font-family: var(--font-cursive); font-size: 2.3rem; font-weight: 400; color: var(--primary); vertical-align: middle; margin-left: 2px; text-transform: none; background: none; -webkit-text-fill-color: initial;">Agent Studio</span></span>
         </div>
         <div class="api-badges">
             <div class="badge {% if has_gemini %}configured{% endif %}">
@@ -721,10 +736,11 @@
     <main>
         <!-- Sidebar Inputs Panel -->
         <section class="control-panel">
-            <div class="control-title">
-                <i class="fa-solid fa-sliders"></i>
+            <div class="control-title" style="font-family: var(--font-serif); font-style: italic; font-size: 1.25rem;">
+                <i class="fa-solid fa-sliders" style="font-style: normal;"></i>
                 Configuration
             </div>
+            <span style="font-family: var(--font-cursive); font-size: 1.5rem; color: var(--primary); display: block; margin-top: -18px; margin-bottom: 5px; font-weight: 400; text-transform: none;">Agent settings</span>
             
             <div class="form-group">
                 <label for="taskInput">Task / Query</label>
@@ -779,8 +795,8 @@
             <div class="log-container" id="logContainer">
                 <div class="placeholder-text" id="placeholder">
                     <i class="fa-solid fa-wand-magic-sparkles"></i>
-                    <h3>Ready to Begin</h3>
-                    <p>Enter a task in the control panel and trigger the execution loop.</p>
+                    <h3 style="font-family: var(--font-cursive); font-size: 3rem; font-weight: 400; color: var(--primary); margin-bottom: -4px;">Ready to Begin</h3>
+                    <p style="font-family: var(--font-serif); font-style: italic; color: var(--text-muted); font-size: 0.95rem;">Enter a task in the control panel and trigger the execution loop.</p>
                 </div>
             </div>
         </section>
