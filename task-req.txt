@@ -1,0 +1,151 @@
+Objective
+You will build a functional AI agent that can solve multi-step problems by using external tools. You'll learn the core concepts of agentic AI, including the ReAct (Reasoning + Acting) pattern and function calling, by implementing an agent that can interact with APIs and execute code. This matters because agent-based systems are the foundation for advanced AI applications like autonomous coding assistants and complex problem-solving tools.
+
+Description
+Introduction to AI Agents
+A standard Large Language Model (LLM) call is stateless: it receives an input and produces an output without memory of past interactions or the ability to act on the world. An AI agent transcends this limitation by operating in a continuous loop. It uses a set of predefined tools to gather information, interact with external systems, and take actions to achieve a complex, multi-step goal provided by a user.
+
+This agentic behavior is what powers sophisticated systems like GitHub Copilot Workspace, which can plan and execute coding tasks, and other autonomous assistants that can perform web research or manage system resources.
+
+The ReAct Framework
+The most common and effective reasoning pattern for building agents is ReAct, which stands for Reasoning + Acting. The core idea is that the LLM alternates between two distinct phases in a loop:
+
+Reason (Thought): The model first “thinks” about the overall goal, analyzes the information it has so far, and decides on the next logical step. This internal monologue helps it form a plan and identify which tool, if any, is needed.
+Act (Action): Based on its reasoning, the model decides to call a specific tool with the necessary arguments. The agent's framework then executes this tool call and captures the output.
+The result of the action, called an Observation, is fed back into the agent's context. The loop then repeats with this new information, allowing the agent to refine its plan and take subsequent steps. This cycle continues until the model determines that the user's goal has been fully accomplished, at which point it generates a final answer.
+
+ReAct Agent Loop Visualization
+The following diagram illustrates the flow of a ReAct agent handling a user request:
+
+Expand
+Defining and Implementing Tools
+Tools are simply functions that the LLM can call. To make them accessible to the model, you must provide a clear definition, typically in a structured format like JSON Schema. This definition tells the LLM the tool's name, its purpose, and the arguments it requires.
+
+Example Tool Definition
+Here is a JSON schema for a hypothetical get_weather tool:
+
+{
+  "name": "get_weather",
+  "description": "Get the current weather for a specific city. Returns a summary including temperature, general conditions, and humidity.",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "city": { 
+        "type": "string", 
+        "description": "The name of the city, e.g., 'Tokyo' or 'San Francisco'"
+      }
+    },
+    "required": ["city"]
+  }
+}
+Your task is to implement at least three such tools. You can choose from the suggestions below or create your own. The key is that each tool should be a regular Python function that returns a string result.
+
+Suggested Tools
+Tool Signature	Description	Potential Implementation
+get_weather(city: str)	Returns the current weather conditions for a given city.	Use a free weather API. A great option is wttr.in, which can be called with a simple HTTP request and requires no API key (e.g., curl wttr.in/Tokyo?format=j1).
+search_web(query: str)	Returns a list of snippets from top web search results for a query.	Use a simple search API like the DuckDuckGo Instant Answer API or a more robust service like SerpAPI (which has a free tier).
+run_python(code: str)	Executes a string of Python code and returns its standard output.	Use Python's subprocess module. For security, ensure you run it in a sandboxed environment and include a timeout to prevent long-running code.
+read_file(path: str)	Reads the contents of a local text file and returns it as a string.	Use standard file I/O operations. Be sure to include validation to prevent access to unauthorized file paths (e.g., directory traversal).
+calculate(expression: str)	Evaluates a mathematical expression safely.	Instead of using the dangerous eval(), use a library like numexpr or parse the expression with ast.literal_eval to ensure safety.
+Implementing the Agent's Tool Loop
+The core of your agent will be a loop that orchestrates the conversation between the LLM and the tools. The following pseudocode provides a robust starting point for your run_agent function.
+
+def run_agent(task: str, max_steps: int = 10) -> str:
+    # Start the conversation with the user's initial task
+    messages = [{"role": "user", "content": task}]
+
+    for step in range(max_steps):
+        print(f"--- Step {step + 1}/{max_steps} ---")
+        
+        # Call the LLM with the current conversation history and available tools
+        response = call_llm_api(messages, tools=TOOL_DEFINITIONS)
+
+        # Decision Point: Does the LLM want to respond directly or use a tool?
+        if response.stop_reason == "end_turn":
+            # The agent has finished its work and is providing a final answer.
+            print("Agent provides final answer.")
+            return response.final_text()
+
+        if response.stop_reason == "tool_use":
+            # The agent wants to call one or more tools.
+            tool_call = response.tool_use_block
+            print(f"Executing tool: {tool_call.name} with input: {tool_call.input}")
+            
+            # Execute the requested tool and get the result (observation)
+            result = execute_tool(tool_call.name, tool_call.input)
+            print(f"Observation: {result}")
+
+            # Append the assistant's turn and the tool result to the conversation history
+            messages.append({"role": "assistant", "content": response.content}) # The thought and tool call
+            messages.append({"role": "user", "content": tool_result_to_json(result)}) # The tool output
+
+    # If the loop finishes without a final answer, the agent has timed out.
+    return "Max steps reached without completing the task."
+Step-by-Step Implementation Guide
+Implement Your Tools: Create Python functions for the tools you've chosen. Each function should accept arguments as specified in its definition and return a single string.
+
+Define Tool Schemas: For each tool function, write a corresponding JSON schema that accurately describes its name, purpose, and parameters.
+
+Build the Agent Loop: Implement the main agent loop as outlined in the pseudocode. This will involve managing the conversation history (messages) and calling your LLM API of choice.
+
+Test a Single-Tool Task: Begin with a simple task that only requires one tool call to verify your setup is working correctly. For example: "What is the current weather in Paris?"
+
+Test a Multi-Tool Task: Test a more complex task that forces the agent to use at least two different tools in sequence. For example: "Find the weather in Paris and calculate how many degrees warmer it is than London."
+
+Add Logging: Implement step-count logging (Step 1/10...) and print the agent's thoughts, tool calls, and observations at each step. This reasoning trace is crucial for debugging and understanding the agent's behavior.
+
+Implement Safety Limits: Ensure your agent loop has a strict max_steps limit to prevent infinite loops and excessive API calls. If this limit is reached, the agent should stop and return a graceful error message.
+
+Handle Tool Failures: Test what happens if a tool returns an error (e.g., an invalid city for the weather tool). A robust agent should be able to see the error message and potentially try a different approach.
+
+Stretch Goals
+Human-in-the-Loop Confirmation: For tools that have side effects (e.g., write_file, send_email), modify your loop to print the intended action and prompt the user for confirmation (Proceed? (y/n)) before execution.
+Tool Error Recovery: Enhance your agent's logic and system prompt to enable it to recover from tool errors. For example, if get_weather("Pari") fails, it should recognize the typo and try again with get_weather("Paris").
+Implement a Planning Step: Before entering the main ReAct loop, add a preliminary step where the agent first outputs a high-level, step-by-step plan to solve the user's task. Your execution loop can then follow this plan.
+Core Requirements
+1.
+The application must define and implement at least three distinct, functional tools.
+
+Verification
+✓ At least three Python functions must exist that serve as tools.
+✓ Each function must accept arguments and return a string-based result.
+✓ The tools should perform distinct actions (e.g., one for data retrieval, one for calculation, one for file I/O).
+2.
+Each implemented tool must have a corresponding JSON schema definition that the LLM can use.
+
+Verification
+✓ A list or map of JSON objects representing the tool schemas must be present.
+✓ Each schema must correctly specify the tool's name, description, and parameters (including properties and required fields) according to the standards of your chosen LLM API.
+3.
+The agent must be built around a ReAct-style loop that iteratively calls the LLM and tools.
+
+Verification
+✓ The code must contain a loop that alternates between calling the LLM and executing tools.
+✓ The output (observation) from each tool call must be added back to the conversation history and used as context for the next LLM call.
+✓ The loop must terminate when the LLM indicates the task is complete by providing a final answer instead of a tool call.
+4.
+The agent must be able to successfully complete a task that requires calling at least two different tools in sequence.
+
+Verification
+Provide a sample multi-tool prompt in your README (e.g., "What's the weather in New York City, and what is 5 factorial?").
+✓ When run with this prompt, the agent must first call the weather tool, then the calculation tool, and finally combine the results into a coherent final answer.
+5.
+The application must print a full reasoning trace to the console during execution.
+
+Verification
+✓ The console output must clearly display each step of the agent's process.
+✓ For each step, the output should include the agent's 'thought' (its reasoning), the 'action' it took (the tool call), and the 'observation' it received (the tool's return value).
+6.
+The agent's loop must include a mechanism to prevent infinite execution.
+
+Verification
+✓ The agent must have a configurable max_steps parameter.
+✓ If the number of loop iterations exceeds this limit, the agent must stop execution.
+✓ Upon stopping, it must output a graceful failure message, such as "Max steps reached without completing the task."
+
+Submission Instructions
+Your submission must be a Git repository containing all your application code. The repository must include a Dockerfile and docker-compose.yml for containerization, and an .env.example file listing all required environment variables (e.g., API keys). Do not commit real secrets. The README.md file should provide clear, step-by-step instructions for setting up and running your agent. Ensure all functional requirements are met and the application is runnable.
+
+Evaluation Overview
+Your submission will be evaluated based on its correctness, code quality, and documentation. Automated tests will be run to verify that your agent meets all the functional requirements, including proper tool implementation, successful execution of multi-step tasks, and correct handling of the maximum steps limit. Your code will also be assessed by an automated code analysis tool for readability, maintainability, and adherence to best practices. Finally, your README.md will be checked for clarity and completeness of setup instructions.
+
